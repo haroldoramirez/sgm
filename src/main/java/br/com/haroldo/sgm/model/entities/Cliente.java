@@ -1,14 +1,12 @@
-package br.com.haroldo.sgm.model.entity;
+package br.com.haroldo.sgm.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDateTime;
 
@@ -27,10 +25,8 @@ public class Cliente {
     @NotEmpty(message = "{campo.nome.obrigatorio}")
     private String nome;
 
-    @Column(nullable = false, length = 11)
-    @NotNull(message = "{campo.cpf.obrigatorio}")
-    @CPF(message = "{campo.cpf.invalido}")
-    private String cpf;
+    @Column(nullable = false, length = 14, unique = true)
+    private String cpfCnpj;
 
     @Column(name = "data_cadastro", updatable = false)
     @JsonFormat(pattern = "dd/MM/yyyy")
@@ -39,6 +35,18 @@ public class Cliente {
     @PrePersist
     public void prePersist() {
         setDataCadastro(LocalDateTime.now());
+        normalizarDocumento();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        normalizarDocumento();
+    }
+
+    private void normalizarDocumento() {
+        if (cpfCnpj != null) {
+            cpfCnpj = cpfCnpj.replaceAll("\\D", "");
+        }
     }
 
 }

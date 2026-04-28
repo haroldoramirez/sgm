@@ -1,7 +1,8 @@
 package br.com.haroldo.sgm.rest;
 
-import br.com.haroldo.sgm.model.entity.Cliente;
-import br.com.haroldo.sgm.model.repository.ClienteRespository;
+import br.com.haroldo.sgm.model.entities.Cliente;
+import br.com.haroldo.sgm.model.repositories.ClienteRespository;
+import br.com.haroldo.sgm.rest.dtos.ClienteDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,8 +22,15 @@ public class ClienteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Cliente salvar(@RequestBody @Valid Cliente cliente) {
+    public Cliente salvar(@RequestBody @Valid ClienteDTO dto) {
+
+        Cliente cliente = Cliente.builder()
+            .nome(dto.getNome())
+            .cpfCnpj(dto.getCpfCnpj())
+            .build();
+
         return respository.save(cliente);
+
     }
 
     @GetMapping("{id}")
