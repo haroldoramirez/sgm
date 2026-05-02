@@ -1,6 +1,6 @@
 package br.com.haroldo.sgm.rest.dtos;
 
-import br.com.haroldo.sgm.validator.CpfCnpj;
+import br.com.haroldo.sgm.validator.cpfcnpj.CpfCnpj;
 import jakarta.validation.constraints.NotBlank;
 
 public class ClienteDTO {

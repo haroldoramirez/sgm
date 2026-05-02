@@ -1,4 +1,4 @@
-package br.com.haroldo.sgm.validator;
+package br.com.haroldo.sgm.validator.cpfcnpj;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
