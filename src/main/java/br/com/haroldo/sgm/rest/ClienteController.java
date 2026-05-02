@@ -22,11 +22,11 @@ public class ClienteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Cliente salvar(@RequestBody @Valid ClienteDTO dto) {
+    public Cliente salvar(@RequestBody @Valid ClienteDTO clienteDTO) {
 
         Cliente cliente = Cliente.builder()
-            .nome(dto.getNome())
-            .cpfCnpj(dto.getCpfCnpj())
+            .nome(clienteDTO.getNome())
+            .cpfCnpj(clienteDTO.getCpfCnpj())
             .build();
 
         return respository.save(cliente);
@@ -53,13 +53,20 @@ public class ClienteController {
 
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void atualizar(@PathVariable Integer id, @RequestBody @Valid Cliente clienteAtualizado) {
+    public void atualizar(@PathVariable Integer id, @RequestBody @Valid ClienteDTO clienteAtualizadoDTO) {
         respository
             .findById(id)
-            .map( cliente -> {
-                clienteAtualizado.setId(cliente.getId());
-                return respository.save(clienteAtualizado);
-            }).orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+            .map(cliente -> {
+
+                // Atualiza os campos da entidade
+                cliente.setNome(clienteAtualizadoDTO.getNome());
+                cliente.setCpfCnpj(clienteAtualizadoDTO.getCpfCnpj());
+
+                return respository.save(cliente);
+            })
+            .orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado")
+            );
     }
 
 }

@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 
 public class ClienteDTO {
 
+    private Long id;
+
     @NotBlank
     private String nome;
 
@@ -26,6 +28,14 @@ public class ClienteDTO {
 
     public void setCpfCnpj(String cpfCnpj) {
         this.cpfCnpj = cpfCnpj;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
 }
