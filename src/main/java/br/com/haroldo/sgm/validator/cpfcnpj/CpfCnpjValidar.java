@@ -8,6 +8,7 @@ public class CpfCnpjValidar {
             return false;
         }
 
+        // Normalizar
         String numbers = cpfCnpj.replaceAll("\\D", "");
 
         if (todosCaracteresIguais(numbers)) {

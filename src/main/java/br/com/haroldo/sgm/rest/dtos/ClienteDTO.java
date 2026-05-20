@@ -1,8 +1,21 @@
 package br.com.haroldo.sgm.rest.dtos;
 
+import br.com.haroldo.sgm.model.entities.Cliente;
+import br.com.haroldo.sgm.model.entities.Endereco;
 import br.com.haroldo.sgm.validator.cpfcnpj.CpfCnpj;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.util.List;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ClienteDTO {
 
     private Long id;
@@ -14,28 +27,36 @@ public class ClienteDTO {
     @CpfCnpj
     private String cpfCnpj;
 
-    public String getNome() {
-        return nome;
-    }
+    @Valid
+    private List<EnderecoDTO> enderecos;
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+    public Cliente toEntity() {
 
-    public String getCpfCnpj() {
-        return cpfCnpj;
-    }
+        Cliente cliente = Cliente.builder()
+            .nome(this.nome)
+            .cpfCnpj(this.cpfCnpj)
+            .build();
 
-    public void setCpfCnpj(String cpfCnpj) {
-        this.cpfCnpj = cpfCnpj;
-    }
+        if (enderecos != null) {
 
-    public Long getId() {
-        return id;
-    }
+            for (EnderecoDTO dto : enderecos) {
 
-    public void setId(Long id) {
-        this.id = id;
+                Endereco endereco = Endereco.builder()
+                    .rua(dto.getRua())
+                    .numero(dto.getNumero())
+                    .cidade(dto.getCidade())
+                    .uf(dto.getUf())
+                    .cep(dto.getCep())
+                    .build();
+
+                cliente.adicionarEndereco(endereco);
+
+            }
+
+        }
+
+        return cliente;
+
     }
 
 }
